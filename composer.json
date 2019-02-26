@@ -1,0 +1,20 @@
+{
+    "name": "nydareld/keycloak-user-bundle",
+    "description": "User Bundle using keycloak",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Nydareld\\KeycloakUserBundle\\": ""
+        }
+    },
+    "authors": [
+        {
+            "name": "Théo Guerin",
+            "email": "theo.guerin.pro@gmail.com"
+        }
+    ],
+    "require": {
+        "symfony/framework-bundle": "^4.2"
+    }
+}
