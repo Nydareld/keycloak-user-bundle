@@ -7,6 +7,9 @@ use Symfony\Component\Security\Core\User\UserInterface ;
 class KeycloakUserBundle implements UserInterface
 {
     private $roles;
+
+    private $jwt;
+
     /**
      * TODO
      * Returns the roles granted to the user.
