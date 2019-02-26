@@ -9,6 +9,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 class UserProvider implements UserProviderInterface{
+
+    public function __construct($realm,$url,$clientId){
+        $this->$realm = $realm;
+    }
+
     /**
      * Symfony calls this method if you use features like switch_user
      * or remember_me.

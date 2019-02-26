@@ -15,6 +15,7 @@
         }
     ],
     "require": {
-        "symfony/framework-bundle": "^4.2"
+        "symfony/framework-bundle": "^4.2",
+        "symfony/security-bundle": "^4.2"
     }
 }
