@@ -9,7 +9,7 @@ class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder('keycloak_user');
+        $treeBuilder = new TreeBuilder('nydareld_keycloak_user');
 
         $treeBuilder->getRootNode()
             ->children()

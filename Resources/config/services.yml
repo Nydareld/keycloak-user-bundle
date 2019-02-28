@@ -1,0 +1,9 @@
+
+parameters:
+
+services:
+
+    Nydareld\KeycloakUserBundle\Controller\KeycloakJsonController:
+        public: true
+        arguments:
+            $provider: '@nydareld_keycloak_user.user_provider'
