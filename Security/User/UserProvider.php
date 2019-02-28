@@ -10,9 +10,26 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 class UserProvider implements UserProviderInterface{
 
+    protected $realm;
+    protected $url;
+    protected $clientId;
+
     public function __construct($realm,$url,$clientId){
-        $this->$realm = $realm;
+        $this->realm = $realm;
+        $this->url = $url;
+        $this->clientId = $clientId;
     }
+
+    public function getJson(){
+        return [
+            "realm"=>$this->realm,
+            "auth-server-url"=>$this->url,
+            "resource"=>$this->clientId,
+            "public-client"=>true
+        ];
+
+    }
+
 
     /**
      * Symfony calls this method if you use features like switch_user

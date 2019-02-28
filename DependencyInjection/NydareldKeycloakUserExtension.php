@@ -22,6 +22,10 @@ class NydareldKeycloakUserExtension extends Extension{
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
+        $definition = $container->getDefinition('nydareld_keycloak_user.user_provider');
+        $definition->replaceArgument('$realm', $config['credentials']['realm']);
+        $definition->replaceArgument('$url', $config['credentials']['url']);
+        $definition->replaceArgument('$clientId', $config['credentials']['clientId']);
 
 
     }

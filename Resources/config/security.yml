@@ -3,9 +3,9 @@ services :
     nydareld_keycloak_user.user_provider:
         class: Nydareld\KeycloakUserBundle\Security\User\UserProvider
         arguments:
-            $realm: "@nydareld_keycloak_user.credentials.realm"
-            $url: "@nydareld_keycloak_user.credentials.url"
-            $clientId: "@nydareld_keycloak_user.credentials.clientId"
+            $realm: ''
+            $url: ''
+            $clientId: ''
 
     nydareld_keycloak_user.authenticator:
         class: Nydareld\KeycloakUserBundle\Security\JWTAuthenticator

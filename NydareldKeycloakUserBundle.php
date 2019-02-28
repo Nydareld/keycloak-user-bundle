@@ -9,9 +9,4 @@ use Nydareld\KeycloakUserBundle\DependencyInjection\NydareldKeycloakUserExtensio
 
 class NydareldKeycloakUserBundle extends Bundle
 {
-
-    public function getContainerExtension()
-    {
-        return new NydareldKeycloakUserExtension();
-    }
 }
