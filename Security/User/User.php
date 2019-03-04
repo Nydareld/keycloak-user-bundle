@@ -40,8 +40,12 @@ class User implements UserInterface
 
     private function addRoles($rolesArray,$ressource){
         foreach ($rolesArray as $value) {
-            $this->roles[] = $ressource.':'.$value;
+            $this->roles[] = "ROLE_".$ressource.':'.$value;
         }
+    }
+
+    public function getJwt(){
+        return $this->jwt;
     }
 
     /**
