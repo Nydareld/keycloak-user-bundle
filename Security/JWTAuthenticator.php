@@ -71,7 +71,7 @@ class JWTAuthenticator extends AbstractGuardAuthenticator{
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey){
-        return $token;
+        return null;
     }
 
     public function supportsRememberMe(){
