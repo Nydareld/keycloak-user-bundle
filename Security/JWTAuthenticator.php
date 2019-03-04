@@ -58,24 +58,24 @@ class JWTAuthenticator extends AbstractGuardAuthenticator{
     }
 
     public function checkCredentials($credentials, UserInterface $user){
-        dump("checkCredentials");
-        // TODO: Implement checkCredentials() method.
+        // TODO check la spec
+        return true;
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception){
-        dump("onAuthenticationFailure");
-        dump($exception);
         // TODO: Implement onAuthenticationFailure() method.
+        dump($exception);
+        return new JsonResponse([
+            "message" => "Access Denied"
+        ], Response::HTTP_FORBIDDEN);
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey){
-        dump("onAuthenticationSuccess");
-        // TODO: Implement onAuthenticationSuccess() method.
+        return $token;
     }
 
     public function supportsRememberMe(){
-        dump("supportsRememberMe");
-        // TODO: Implement supportsRememberMe() method.
+        return false;
     }
 
     public function start(Request $request, AuthenticationException $authException = null){
