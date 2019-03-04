@@ -5,8 +5,12 @@ namespace Nydareld\KeycloakUserBundle\Services;
 use Firebase\JWT\JWT;
 use Firebase\JWT\JWK;
 
+
 use Symfony\Component\Cache\Simple\AbstractCache;
 use Symfony\Component\Cache\Simple\FilesystemCache;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+
+use Unirest\Request;
 
 class JWTDecoder {
 
@@ -26,8 +30,11 @@ class JWTDecoder {
 
     function decode($token){
 
-        $key =  $this->getKey() ;
+        $key =  $this->getKey();
+
         $decoded = JWT::decode($token,$key, array('RS256'));
+
+        return $decoded;
 
     }
 
@@ -39,12 +46,23 @@ class JWTDecoder {
     }
 
     function cacheJWKS(){
-        dump("pas de value");
 
-        $value = '{"keys":[{"kid":"N35AFy2AVcge7EtbpYexo5Shth9YrN2RkPO9g_RIc54","kty":"RSA","alg":"RS256","use":"sig","n":"s8OvdMOgdD3x2QB6w8FjIogdMc0S4GLqRoDE_lAdrKRVWOK5NNkhs80ZK4z_vdHUMNs94oBk_gcUwagkw_vgW1qQtQVXJQxQMmlhUXSgI1QlPUdT6xnPF5HWNJCDkEu3deaeHcw6EE6BKkuZyI88F0YvnexZ2W_QPrDKwi8Rhgn1ii6P2Q6_wlkgeKERo32AK0K2_C4VZfwTFrkJWhpmt-wb0LIkPtd0m2qI22DhB2gO4e5UXUNwcqTM35jdD62nh0nzDaSZFLADy0Nb_jbZlcmma6mIXd6s4nl6e5qEqL4a3iwgODWP74PaQ12KHOMBWlE-DC_aodzS6kUFpZg3ZQ","e":"AQAB"}]}';
+        // get openid configuration
+        $response = Request::get($this->openidConfifgurationEndpoint);
+        if( $response->code >= 400 ){
+            throw new HttpException(500,"Keycloak openid endpoint error");
+        }
 
-        $this->cache->set('nydareld_keycloak_user.jwks_configuration', $value, $this->cacheTtl);
+        // get jwks configuration
+        $response = Request::get($response->body->jwks_uri);
+        if( $response->code >= 400 ){
+            throw new HttpException(500,"Keycloak openid endpoint error");
+        }
+
+        // cahe jwks configuration
+        $this->cache->set('nydareld_keycloak_user.jwks_configuration', $response->raw_body, $this->cacheTtl);
 
     }
+
 
 }

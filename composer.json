@@ -19,6 +19,7 @@
         "symfony/security-bundle": "^4.2",
         "lexik/jwt-authentication-bundle": "^2.6",
         "fproject/php-jwt": "^4.0",
-        "symfony/cache": "^4.2"
+        "symfony/cache": "^4.2",
+        "mashape/unirest-php": "^3.0"
     }
 }
