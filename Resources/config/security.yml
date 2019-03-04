@@ -9,3 +9,11 @@ services :
 
     nydareld_keycloak_user.authenticator:
         class: Nydareld\KeycloakUserBundle\Security\JWTAuthenticator
+        arguments:
+            $jwtDecoder: '@nydareld_keycloak_user.jwt_decoder'
+
+    nydareld_keycloak_user.jwt_decoder:
+        class: Nydareld\KeycloakUserBundle\Services\JWTDecoder
+        arguments:
+            $openidConfifgurationEndpoint: ''
+            $cacheProvider: null
