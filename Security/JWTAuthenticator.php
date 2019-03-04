@@ -14,6 +14,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+use Nydareld\KeycloakUserBundle\Security\User\User;
+
+use Firebase\JWT\ExpiredException;
+
 class JWTAuthenticator extends AbstractGuardAuthenticator{
 
     protected $jwtDecoder;
@@ -37,23 +41,20 @@ class JWTAuthenticator extends AbstractGuardAuthenticator{
         if (!$token) {
             return;
         }
+
         return [
-            'token' => $token ,
-            'parsed' => $this->jwtDecoder->decode($token)
+            "token"=>$token,
+            "parsed"=>$this->jwtDecoder->decode($token)
         ];
 
     }
 
     public function supports(Request $request){
-        // dump("supports");
         return $request->headers->has('Authorization');
     }
 
     public function getUser($credentials, UserProviderInterface $userProvider){
-
-        dump("getUser",$userProvider,$credentials);
-        $userProvider->loadUserByToken($credentials["token"]);
-        // TODO: Implement getUser() method.
+        return $userProvider->loadUserByParsedToken($credentials['parsed']);
     }
 
     public function checkCredentials($credentials, UserInterface $user){
@@ -63,6 +64,7 @@ class JWTAuthenticator extends AbstractGuardAuthenticator{
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception){
         dump("onAuthenticationFailure");
+        dump($exception);
         // TODO: Implement onAuthenticationFailure() method.
     }
 
@@ -77,9 +79,8 @@ class JWTAuthenticator extends AbstractGuardAuthenticator{
     }
 
     public function start(Request $request, AuthenticationException $authException = null){
-        dump("start");
+        dump($authException);
         $data = [
-            // you might translate this message
             'message' => 'Authentication Required'
         ];
         return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);
