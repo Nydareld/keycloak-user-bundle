@@ -4,11 +4,14 @@ namespace Nydareld\KeycloakUserBundle\Services;
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\JWK;
+use Firebase\JWT\ExpiredException;
 
 
 use Symfony\Component\Cache\Simple\AbstractCache;
 use Symfony\Component\Cache\Simple\FilesystemCache;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+
 
 use Unirest\Request;
 
@@ -32,9 +35,16 @@ class JWTDecoder {
 
         $key =  $this->getKey();
 
-        $decoded = JWT::decode($token,$key, array('RS256'));
+        try {
+            $decoded = JWT::decode($token,$key, array('RS256'));
+            return $decoded;
+        } catch (ExpiredException $e) {
+            throw new AccessDeniedHttpException("Token expired");
+        }
 
-        return $decoded;
+
+
+
 
     }
 
