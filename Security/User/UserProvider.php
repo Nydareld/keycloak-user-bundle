@@ -74,9 +74,13 @@ class UserProvider implements UserProviderInterface{
             throw new UnsupportedUserException(sprintf('Invalid user class "%s".', get_class($user)));
         }
 
+        if($user->getJwt()->exp > time()){
+            return $user;
+        }
+
         // Return a User object after making sure its data is "fresh".
         // Or throw a UsernameNotFoundException if the user no longer exists.
-        throw new \Exception('TODO: fill in refreshUser() inside '.__FILE__);
+        throw new \Exception('Token expired');
     }
 
     /**
