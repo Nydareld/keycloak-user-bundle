@@ -60,7 +60,7 @@ class User implements UserInterface
      * @return (Role|string)[] The user roles
      */
     public function getRoles(){
-
+        return $this->roles;
     }
     /**
      * TODO
@@ -92,7 +92,7 @@ class User implements UserInterface
      * @return string The username
      */
     public function getUsername(){
-
+        return $this->preferred_username;
     }
     /**
      * TODO
