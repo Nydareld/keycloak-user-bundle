@@ -33,7 +33,9 @@ class NydareldKeycloakUserExtension extends Extension{
 
         $definition = $container->getDefinition('nydareld_keycloak_user.jwt_decoder');
         $definition->replaceArgument('$openidConfifgurationEndpoint', $config['credentials']['openid_confifguration_endpoint']);
-        $definition->replaceArgument('$cacheProvider', $config['cache_provider']);
+        if(isset($config['cache_provider'])){
+            $definition->replaceArgument('$cacheProvider', $config['cache_provider']);
+        }
 
 
 
