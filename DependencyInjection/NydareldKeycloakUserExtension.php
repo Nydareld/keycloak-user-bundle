@@ -28,7 +28,7 @@ class NydareldKeycloakUserExtension extends Extension{
         $definition->replaceArgument('$clientId', $config['credentials']['clientId']);
 
         if( !isset($config['credentials']['openid_confifguration_endpoint'] ) ){
-            $config['credentials']['openid_confifguration_endpoint'] = $config['credentials']['realm'].'/realms/'.$config['credentials']['realm'].'/.well-known/openid-configuration';
+            $config['credentials']['openid_confifguration_endpoint'] = $config['credentials']['url'].'/realms/'.$config['credentials']['realm'].'/.well-known/openid-configuration';
         }
 
         $definition = $container->getDefinition('nydareld_keycloak_user.jwt_decoder');
