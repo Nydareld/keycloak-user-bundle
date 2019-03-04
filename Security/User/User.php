@@ -4,11 +4,45 @@ namespace Nydareld\KeycloakUserBundle\Security\User;
 
 use Symfony\Component\Security\Core\User\UserInterface ;
 
-class KeycloakUserBundle implements UserInterface
+class User implements UserInterface
 {
     private $roles;
 
     private $jwt;
+
+    private $preferred_username;
+    private $locale;
+    private $given_name;
+    private $family_name;
+    private $email;
+    private $name;
+    private $email_verified;
+
+    public function __construct($jwt)
+    {
+        $this->jwt = $jwt;
+
+        $this->roles = [];
+
+        $this->preferred_username = $jwt->preferred_username;
+        $this->locale = $jwt->locale;
+        $this->given_name = $jwt->given_name;
+        $this->family_name = $jwt->family_name;
+        $this->email = $jwt->email;
+        $this->name = $jwt->name;
+        $this->email_verified = $jwt->email_verified;
+
+        $this->addRoles($jwt->realm_access->roles,"realm");
+        foreach ($jwt->resource_access as $ressource => $roles) {
+            $this->addRoles($roles->roles,$ressource);
+        }
+    }
+
+    private function addRoles($rolesArray,$ressource){
+        foreach ($rolesArray as $value) {
+            $this->roles[] = $ressource.':'.$value;
+        }
+    }
 
     /**
      * TODO

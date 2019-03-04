@@ -51,6 +51,10 @@ class UserProvider implements UserProviderInterface{
         throw new \Exception('TODO: fill in loadUserByUsername() inside '.__FILE__);
     }
 
+    public function loadUserByParsedToken($parsedToken){
+        return new User($parsedToken);
+    }
+
     /**
      * Refreshes the user after being reloaded from the session.
      *
