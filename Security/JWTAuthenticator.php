@@ -2,17 +2,31 @@
 
 namespace Nydareld\KeycloakUserBundle\Security;
 
+use Lexik\Bundle\JWTAuthenticationBundle\TokenExtractor\AuthorizationHeaderTokenExtractor;
+use Nydareld\KeycloakUserBundle\Services\JWTDecoder;
+
 use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class JWTAuthenticator extends AbstractGuardAuthenticator{
 
+    protected $jwtDecoder;
+
+    public function __construct(JWTDecoder $jwtDecoder)
+    {
+        $this->jwtDecoder = $jwtDecoder;
+    }
+
     public function getCredentials(Request $request){
+
         dump("getCredentials");
+
         $extractor = new AuthorizationHeaderTokenExtractor(
             'Bearer',
             'Authorization'
@@ -23,8 +37,10 @@ class JWTAuthenticator extends AbstractGuardAuthenticator{
         if (!$token) {
             return;
         }
-        dump( $token);
-        return $token;
+        return [
+            'token' => $token ,
+            'parsed' => $this->jwtDecoder->decode($token)
+        ];
 
     }
 
@@ -34,7 +50,9 @@ class JWTAuthenticator extends AbstractGuardAuthenticator{
     }
 
     public function getUser($credentials, UserProviderInterface $userProvider){
-        dump("getUser");
+
+        dump("getUser",$userProvider,$credentials);
+        $userProvider->loadUserByToken($credentials["token"]);
         // TODO: Implement getUser() method.
     }
 
@@ -60,7 +78,11 @@ class JWTAuthenticator extends AbstractGuardAuthenticator{
 
     public function start(Request $request, AuthenticationException $authException = null){
         dump("start");
-        // TODO: Implement start() method.
+        $data = [
+            // you might translate this message
+            'message' => 'Authentication Required'
+        ];
+        return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);
     }
 
 }
