@@ -18,11 +18,11 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('realm')->defaultValue("master")->end()
                         ->scalarNode('url')->isRequired()->cannotBeEmpty()->end()
                         ->scalarNode('clientId')->isRequired()->cannotBeEmpty()->end()
+                        ->scalarNode('openid_confifguration_endpoint')->end()
                     ->end()
                 ->end()
+                ->scalarNode('cache_provider')->end()
             ->end()
-
-
         ;
 
         return $treeBuilder;
