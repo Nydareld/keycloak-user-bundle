@@ -7,6 +7,8 @@ use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
+use Symfony\Component\HttpKernel\AccessDeniedHttpException;
+
 
 class UserProvider implements UserProviderInterface{
 
@@ -51,8 +53,8 @@ class UserProvider implements UserProviderInterface{
         throw new \Exception('TODO: fill in loadUserByUsername() inside '.__FILE__);
     }
 
-    public function loadUserByParsedToken($parsedToken){
-        return new User($parsedToken);
+    public function loadUserByToken($tokenArray){
+        return new User($tokenArray);
     }
 
     /**
@@ -74,13 +76,17 @@ class UserProvider implements UserProviderInterface{
             throw new UnsupportedUserException(sprintf('Invalid user class "%s".', get_class($user)));
         }
 
-        if($user->getJwt()->exp > time()){
+
+        if($user->getParsedToken()->exp > time()){
             return $user;
+        }else {
+            dump($user->getParsedToken());
+            dump("exp ".$user->getParsedToken()->exp." time ".time() );
+            throw new AccessDeniedHttpException('Token expired');
         }
 
         // Return a User object after making sure its data is "fresh".
         // Or throw a UsernameNotFoundException if the user no longer exists.
-        throw new \Exception('Token expired');
     }
 
     /**

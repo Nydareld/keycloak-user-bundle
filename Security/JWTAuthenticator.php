@@ -43,7 +43,7 @@ class JWTAuthenticator extends AbstractGuardAuthenticator{
         }
 
         return [
-            "token"=>$token,
+            "jwt"=>$token,
             "parsed"=>$this->jwtDecoder->decode($token)
         ];
 
@@ -54,7 +54,7 @@ class JWTAuthenticator extends AbstractGuardAuthenticator{
     }
 
     public function getUser($credentials, UserProviderInterface $userProvider){
-        return $userProvider->loadUserByParsedToken($credentials['parsed']);
+        return $userProvider->loadUserByToken($credentials);
     }
 
     public function checkCredentials($credentials, UserInterface $user){

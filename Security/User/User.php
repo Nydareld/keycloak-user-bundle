@@ -18,22 +18,23 @@ class User implements UserInterface
     private $name;
     private $email_verified;
 
-    public function __construct($jwt)
-    {
-        $this->jwt = $jwt;
+    public function __construct(Array $tokenArray){
+
+        $this->parsedToken = $tokenArray["parsed"];
+        $this->jwt = $tokenArray["jwt"];
 
         $this->roles = [];
 
-        $this->preferred_username = $jwt->preferred_username;
-        $this->locale = $jwt->locale;
-        $this->given_name = $jwt->given_name;
-        $this->family_name = $jwt->family_name;
-        $this->email = $jwt->email;
-        $this->name = $jwt->name;
-        $this->email_verified = $jwt->email_verified;
+        $this->preferred_username = $this->parsedToken->preferred_username;
+        $this->locale = $this->parsedToken->locale;
+        $this->given_name = $this->parsedToken->given_name;
+        $this->family_name = $this->parsedToken->family_name;
+        $this->email = $this->parsedToken->email;
+        $this->name = $this->parsedToken->name;
+        $this->email_verified = $this->parsedToken->email_verified;
 
-        $this->addRoles($jwt->realm_access->roles,"realm");
-        foreach ($jwt->resource_access as $ressource => $roles) {
+        $this->addRoles($this->parsedToken->realm_access->roles,"realm");
+        foreach ($this->parsedToken->resource_access as $ressource => $roles) {
             $this->addRoles($roles->roles,$ressource);
         }
     }
@@ -47,6 +48,11 @@ class User implements UserInterface
     public function getJwt(){
         return $this->jwt;
     }
+
+    public function getParsedToken(){
+        return $this->parsedToken;
+    }
+
 
     /**
      * TODO
