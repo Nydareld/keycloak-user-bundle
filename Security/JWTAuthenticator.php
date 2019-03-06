@@ -29,8 +29,6 @@ class JWTAuthenticator extends AbstractGuardAuthenticator{
 
     public function getCredentials(Request $request){
 
-        dump("getCredentials");
-
         $extractor = new AuthorizationHeaderTokenExtractor(
             'Bearer',
             'Authorization'
