@@ -15,11 +15,11 @@
         }
     ],
     "require": {
-        "symfony/framework-bundle": "^4.2",
-        "symfony/security-bundle": "^4.2",
+        "symfony/framework-bundle": "^5.3",
+        "symfony/security-bundle": "^5.3",
         "lexik/jwt-authentication-bundle": "^2.6",
         "fproject/php-jwt": "^4.0",
-        "symfony/cache": "^4.2",
+        "symfony/cache": "^5.3",
         "mashape/unirest-php": "^3.0"
     }
 }
