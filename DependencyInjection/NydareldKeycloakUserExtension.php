@@ -22,23 +22,22 @@ class NydareldKeycloakUserExtension extends Extension{
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $definition = $container->getDefinition('nydareld_keycloak_user.user_provider');
-        $definition->replaceArgument('$realm', $config['credentials']['realm']);
-        $definition->replaceArgument('$url', $config['credentials']['url']);
-        $definition->replaceArgument('$clientId', $config['credentials']['clientId']);
-
-        if( !isset($config['credentials']['openid_confifguration_endpoint'] ) ){
-            $config['credentials']['openid_confifguration_endpoint'] = $config['credentials']['url'].'/realms/'.$config['credentials']['realm'].'/.well-known/openid-configuration';
+        if( array_key_exists('credentials',$config) ){
+            $definition = $container->getDefinition('nydareld_keycloak_user.user_provider');
+            $definition->replaceArgument('$realm', $config['credentials']['realm']);
+            $definition->replaceArgument('$url', $config['credentials']['url']);
+            $definition->replaceArgument('$clientId', $config['credentials']['clientId']);
+    
+            if( !isset($config['credentials']['openid_confifguration_endpoint'] ) ){
+                $config['credentials']['openid_confifguration_endpoint'] = $config['credentials']['url'].'/realms/'.$config['credentials']['realm'].'/.well-known/openid-configuration';
+            }
+    
+            $definition = $container->getDefinition('nydareld_keycloak_user.jwt_decoder');
+            $definition->replaceArgument('$openidConfifgurationEndpoint', $config['credentials']['openid_confifguration_endpoint']);
+            if(isset($config['cache_provider'])){
+                $definition->replaceArgument('$cacheProvider', $config['cache_provider']);
+            }
         }
-
-        $definition = $container->getDefinition('nydareld_keycloak_user.jwt_decoder');
-        $definition->replaceArgument('$openidConfifgurationEndpoint', $config['credentials']['openid_confifguration_endpoint']);
-        if(isset($config['cache_provider'])){
-            $definition->replaceArgument('$cacheProvider', $config['cache_provider']);
-        }
-
-
-
 
     }
 
